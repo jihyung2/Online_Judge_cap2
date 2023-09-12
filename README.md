@@ -23,5 +23,6 @@ Dockerfile -> DockerImage -> Docker Container
 Dokcer Desktop for Apple silicon 설치 -> docker 애플리케이션 실행하면 docker engine 작동
     테스트 : docker run -it -p 포트번호 : 번호 nginx
 
+docker-compose up -d : 한번에 여러개 
 
 참고용 : https://www.lainyzine.com/ko/article/how-to-install-docker-for-m1-apple-silicon/
