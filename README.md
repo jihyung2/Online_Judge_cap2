@@ -4,9 +4,6 @@ oj-backend - 웹 서버의 소스코드 형태, 변경시 사용자가 온라인
 judge-server - api형태로 작동, 채점을 맡길때만 사용
 나머지 두개 상관 없음
 
-
-
-
 ## 도커
 리눅스 컨테이너를 기반으로 하여 특정한 서비스를 패키징하고 배포하는데 유용한 오픈소스 프로그램이다.
 
@@ -21,3 +18,10 @@ judge-server - api형태로 작동, 채점을 맡길때만 사용
 Dockerfile -> DockerImage -> Docker Container
 
 
+### 도커 m1
+
+Dokcer Desktop for Apple silicon 설치 -> docker 애플리케이션 실행하면 docker engine 작동
+    테스트 : docker run -it -p 포트번호 : 번호 nginx
+
+
+참고용 : https://www.lainyzine.com/ko/article/how-to-install-docker-for-m1-apple-silicon/
