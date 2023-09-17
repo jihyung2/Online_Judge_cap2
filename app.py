@@ -15,15 +15,15 @@ def submit():
     code = request.json.get('code')
 
     # 코드를 .py 파일로 저장하기
-    with open('user_code.py', 'w') as f:
+    with open('UserAnswer/user_code.py', 'w') as f:
         f.write(code)
 
     # 테스트 케이스 실행하고 결과 확인하기
     try:
-        output = subprocess.check_output(['python3', 'user_code.py'], timeout=5)
+        output = subprocess.check_output(['python3', 'UserAnswer/user_code.py'], timeout=5)
         output = output.decode('utf-8')
 
-        expected_output = subprocess.check_output(['python3', 'correct1.py'])
+        expected_output = subprocess.check_output(['python3', 'Correct/correct1.py'])
         expected_output = expected_output.decode('utf-8')
 
         if output == expected_output:
