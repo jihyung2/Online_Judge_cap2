@@ -1,7 +1,7 @@
 import requests
 
 # 서버 URL
-url = "http://localhost:8070/submit"
+url = "http://localhost:8090/submit"
 
 # 제출할 코드
 code = """

@@ -27,7 +27,7 @@ def submit():
         expected_output = expected_output.decode('utf-8')
 
         if output == expected_output:
-            return jsonify({"result": "Correct"})
+            return jsonify({"result": "Correct", "output": output})
         else:
             return jsonify({"result": "Incorrect", "output": output})
 
@@ -36,4 +36,4 @@ def submit():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8070)
+    app.run(host='0.0.0.0', port=8090)
