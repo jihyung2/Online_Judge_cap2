@@ -1,5 +1,14 @@
 # Online_Judge_cap2
 
+### 깃허브 공동작업 관리
+여러명이 협업할때는 브랜치를 사용한다.
+branch작업 -> master와 merge -> push순이다.
+
+여러명이 작업하다 지맘대로 push하면 충돌이 일어남
+branch에서 commit후 원래의 main과 합치고 푸시하기
+
+### OnlineJudge 칭따오 오픈소스
+
 oj-backend - 웹 서버의 소스코드 형태, 변경시 사용자가 온라인 시스템을 변경 가능
 judge-server - api형태로 작동, 채점을 맡길때만 사용
 나머지 두개 상관 없음
