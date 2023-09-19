@@ -44,3 +44,9 @@ Dokcer Desktop for Apple silicon 설치 -> docker 애플리케이션 실행하�
 참고용 : https://www.lainyzine.com/ko/article/how-to-install-docker-for-m1-apple-silicon/
 
 
+### 스프링
+@Controller: 전통적인 스프링 웹 애플리케이션에서 사용되며 HTML 뷰를 렌더링하고 데이터를 화면에 전달
+
+@RestController: RESTful 웹 서비스에서 사용되며 JSON 또는 XML 형식의 데이터를 반환하고 외부 시스템과의 API 통신에 사용, 뷰 템플릿 없이 데이터만 반환
+
+
