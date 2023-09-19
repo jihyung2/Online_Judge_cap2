@@ -1,17 +1,15 @@
 package com.example.cap2.controller;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-@Controller
+@RestController
 public class restapi {
 
-    @PostMapping("/sendData")
+    @PostMapping("/submit")
     @ResponseBody
     public String sendDataToPython(@RequestParam String inputData) {
         try {
@@ -32,3 +30,4 @@ public class restapi {
         }
     }
 }
+

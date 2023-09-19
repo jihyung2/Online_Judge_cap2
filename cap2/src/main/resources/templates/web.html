@@ -92,11 +92,29 @@
         var code = document.getElementById('newProblemCode').value;
 
         if (name && description && code) {
-            // TODO : Send the new problem to the server and update the problem list
-            // This is just a placeholder and needs to be replaced with an actual AJAX call
-            $('#problems').append('<li>' + name + '<button onclick=\'testProblem("' + name + '", "' +
-                description + '", "' + code + '")\' class=\'btn btn-primary btn-sm ml-2\'>Test</button></li>');
-            showProblems();
+            var problemData = {
+                name: name,
+                description: description,
+                code: code
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/problems/add', // REST API 엔드포인트 URL
+                contentType: 'application/json',
+                data: JSON.stringify(problemData),
+                success: function (data) {
+                    // 성공적으로 서버에 문제를 추가한 경우의 처리 로직
+                    $('#problems').append('<li>' + name + '<button onclick=\'testProblem("' + name + '", "' +
+                        description + '", "' + code + '")\' class=\'btn btn-primary btn-sm ml-2\'>Test</button></li>');
+                    showProblems();
+                    alert(data); // 성공 메시지 표시
+                },
+                error: function (error) {
+                    // 서버에 문제를 추가하는 중 오류가 발생한 경우의 처리 로직
+                    alert('Error adding problem: ' + error.responseText);
+                }
+            });
         }
     }
 
