@@ -6,11 +6,13 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.File;
+import org.apache.commons.io.FileUtils;
 
 @RestController
 @RequestMapping("/api/problems")
@@ -62,7 +64,7 @@ public class Request {
 
             if (responseFromPythonServer.getStatusCodeValue() == 200) {
                 BufferedWriter writer
-                        = new BufferedWriter(new FileWriter("../UserAnswer/"+request.getName()+"_ouput.txt"));
+                        = new BufferedWriter(new FileWriter("../UserAnswer/"+request.getName()+"_output.txt"));
                 writer.write(responseFromPythonServer.getBody());
                 writer.close();
 
@@ -76,6 +78,21 @@ public class Request {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     "문제 추가 에러 발생: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getOutput")
+    public ResponseEntity<String> getOutput(@RequestParam String name) {
+        try {
+            File outputFile = new File("../UserAnswer/"+ name +"_output.txt");
+            if (outputFile.exists()) {
+                String output = FileUtils.readFileToString(outputFile, StandardCharsets.UTF_8);
+                return ResponseEntity.ok(output);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error reading output file: " + e.getMessage());
         }
     }
 }

@@ -118,16 +118,30 @@
         }
     }
 
-    function testProblem(name, description, code) {
+    function testProblem(name, description) {
         // Clear existing problem details first
         $('#name').empty();
         $('#description').empty();
-        $('#code').empty();
+        $('#output').empty();
 
         // Set the problem name and description
         $('#name').append('<li>' + name + '</li>');
         $('#description').append('<li>' + description + '</li>');
-        // Set the code and show the codebox
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/problems/getOutput',
+            data: { name: name },
+            success: function (response) {
+                $("#output").text(response);  // Display the output on the webpage
+            },
+            error: function (error) {
+                console.error(error);
+                alert('Error getting problem output');
+            }
+        });
+
+        // Show the codebox
         $('#codebox').show();
     }
 
