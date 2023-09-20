@@ -95,7 +95,7 @@
             var problemData = {
                 name: name,
                 description: description,
-                code: code
+                code: code, // 특수 문자가 적절히 이스케이프됩니다.
             };
 
             $.ajax({
@@ -106,7 +106,7 @@
                 success: function (data) {
                     // 성공적으로 서버에 문제를 추가한 경우의 처리 로직
                     $('#problems').append('<li>' + name + '<button onclick=\'testProblem("' + name + '", "' +
-                        description + '", "' + code + '")\' class=\'btn btn-primary btn-sm ml-2\'>Test</button></li>');
+                        description + '", "' + escapeSpecialChars(code) + '")\' class=\'btn btn-primary btn-sm ml-2\'>Test</button></li>');
                     showProblems();
                     alert(data); // 성공 메시지 표시
                 },
@@ -118,21 +118,33 @@
         }
     }
 
-     function testProblem(name, description, code) {
+    function testProblem(name, description, code) {
         // Clear existing problem details first
         $('#name').empty();
         $('#description').empty();
         $('#code').empty();
+
         // Set the problem name and description
-         //TODO 백엔드로 넘어가서 이름에 맞게 추가된 code를 불러와 실행시키고 output넣기
         $('#name').append('<li>' + name + '</li>');
         $('#description').append('<li>' + description + '</li>');
         // Set the code and show the codebox
         $('#codebox').show();
     }
 
+    function escapeSpecialChars(input) {
+        // 특수 문자를 이스케이프 처리
+        return input.replace(/[\n\r\t"']/g, function (match) {
+            return {
+                '\n': '\\n',
+                '\r': '\\r',
+                '\t': '\\t',
+                '"': '\\"',
+                "'": "\\'"
+            }[match];
+        });
+    }
 
-    function del() {
+        function del() {
         var delName = prompt("Delete problem name : ");
         if (delName) {
             // Remove the problem, name, and description elements with the specified name
