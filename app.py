@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import subprocess
+import base64
 import os
 
 #모든 문제는 Python으로 해결되어야 합니다.
@@ -10,10 +11,14 @@ app = Flask(__name__)
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    # 사용자가 제출한 코드 받기
-    code = request.json.get('code')
+    # 사용자가 제출한 Base64 인코딩된 코드와 예상 출력값 받기
+    encoded_code = request.json.get('code')
+    expected_output_str = request.json.get('output')
 
-    # 코드를 .py 파일로 저장하기
+    # Base64 인코딩된 코드를 디코딩하기
+    code = base64.b64decode(encoded_code).decode('utf-8')
+
+    # 디코딩된 코드를 .py 파일로 저장하기
     with open('UserAnswer/user_code.py', 'w') as f:
         f.write(code)
 
@@ -22,10 +27,7 @@ def submit():
         output = subprocess.check_output(['python3', 'UserAnswer/user_code.py'], timeout=5)
         output = output.decode('utf-8')
 
-        expected_output = subprocess.check_output(['python3', 'Correct/correct1.py'])
-        expected_output = expected_output.decode('utf-8')
-
-        if output == expected_output:
+        if output == expected_output_str:
             return jsonify({"result": "Correct", "output": output})
         else:
             return jsonify({"result": "Incorrect", "output": output})
@@ -58,4 +60,4 @@ def addProblemRunCode():
         return jsonify({"error": "Time limit exceeded"})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8090)
+    app.run(host='0.0.0.0', port=8055)

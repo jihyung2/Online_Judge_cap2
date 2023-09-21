@@ -42,7 +42,7 @@ public class Request {
             RestTemplate restTemplate = new RestTemplate();
 
             // 파이썬 서버의 URL
-            String pythonServerUrl = "http://127.0.0.1:8090/addProblemRunCode";
+            String pythonServerUrl = "http://127.0.0.1:8055/addProblemRunCode";
 
             // 파이썬 코드를 Map에 저장
             Map<String, String> map = new HashMap<>();
