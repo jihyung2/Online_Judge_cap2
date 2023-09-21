@@ -73,6 +73,7 @@
     </div>
         <button class="btn btn-success" onclick="send()">Submit Code</button><br/>
     <p>Result:</p>
+        <ul id='Queryresult' style='list-style-type:none;'></ul>
     </div>
     </div>
 
@@ -179,14 +180,14 @@
     }
     function send() {
         var code = document.getElementById('code').value;
-
-        if (code && currentProblemName) {
-            console.log("Code:", code); // 코드 변수 값을 찍어줍니다.
+        var usercode = escapeSpecialChars(code)
+        if (usercode && currentProblemName) {
+            console.log("Code:", usercode); // 코드 변수 값을 찍어줍니다.
             console.log("Name:", currentProblemName); // name 변수 값을 찍어줍니다.
             //크롬 관리자 모드 들어가서 console 누르면 돼
 
             var submitData = {
-                code: btoa(code), // Base64 인코딩
+                code: btoa(usercode), // Base64 인코딩
                 name: currentProblemName // 전역 변수 사용
             };
 
@@ -196,13 +197,14 @@
                 contentType: 'application/json',
                 data: JSON.stringify(submitData),
                 success: function (data) {
+                    console.log(data);
                     // 성공적으로 서버에 코드를 제출한 경우의 처리 로직
-                    if(data.result === "Correct"){
-                        $('#codebox').append('<p>Result : Correct</p>');
-                    } else if(data.result === "Incorrect") {
-                        $('#codebox').append('<p>Result : Incorrect</p>');
+                    if(data === "Correct"){
+                        $('#Queryresult').append("<p>correct</p>");
+                    } else if(data === "Incorrect") {
+                        $('#Queryresult').append("No");
                     } else if(data.error){
-                        $('#codebox').append('<p>Error : '+data.error+'</p>');
+                        $('#Queryresult').append('<p>Error : '+data.error+'</p>');
                     }
 
                 },
