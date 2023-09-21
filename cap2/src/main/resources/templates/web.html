@@ -8,7 +8,7 @@
 
     <style>
         #chatbox, #codebox {
-            height: 400px;
+            height: 800px;
             border: 1px solid black;
             overflow-y: scroll;
             display: none; /* Initially hidden */
@@ -25,6 +25,13 @@
         .container {
           margin-top: 20px;
 
+        }
+         .correct {
+             color: green; /* 또는 다른 원하는 스타일을 적용하세요 */
+         }
+
+        .incorrect {
+            color: red; /* 또는 다른 원하는 스타일을 적용하세요 */
         }
     </style>
 </head>
@@ -179,6 +186,7 @@
         }
     }
     function send() {
+        $('#Queryresult').empty();
         var code = document.getElementById('code').value;
         var usercode = escapeSpecialChars(code)
         if (usercode && currentProblemName) {
@@ -200,9 +208,9 @@
                     console.log(data);
                     // 성공적으로 서버에 코드를 제출한 경우의 처리 로직
                     if(data === "Correct"){
-                        $('#Queryresult').append("<p>correct</p>");
+                        $('#Queryresult').append("<p class='correct'>Correct</p>");
                     } else if(data === "Incorrect") {
-                        $('#Queryresult').append("<p>Incorrect</p>");
+                        $('#Queryresult').append("<p class='incorrect'>incorrect</p>");
                     } else if(data.error){
                         $('#Queryresult').append('<p>Error : '+data.error+'</p>');
                     }
@@ -216,7 +224,6 @@
             });
         }
     }
-
 
     function sendMessage() {
         // TODO: Implement chat message sending logic here
