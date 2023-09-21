@@ -202,7 +202,7 @@
                     if(data === "Correct"){
                         $('#Queryresult').append("<p>correct</p>");
                     } else if(data === "Incorrect") {
-                        $('#Queryresult').append("No");
+                        $('#Queryresult').append("<p>Incorrect</p>");
                     } else if(data.error){
                         $('#Queryresult').append('<p>Error : '+data.error+'</p>');
                     }
