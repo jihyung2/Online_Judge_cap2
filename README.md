@@ -59,3 +59,7 @@ Dokcer Desktop for Apple silicon 설치 -> docker 애플리케이션 실행하�
 @RestController: RESTful 웹 서비스에서 사용되며 JSON 또는 XML 형식의 데이터를 반환하고 외부 시스템과의 API 통신에 사용, 뷰 템플릿 없이 데이터만 반환
 
 
+### 온라인 저지
+아직 예외처리해야할 부분이 좀 더 개선사항으로 남았음
+간단한 코드는 가능하지만 좀더 복잡하고 여러 특수문자를 사용하면 에러가 발생함 
+
