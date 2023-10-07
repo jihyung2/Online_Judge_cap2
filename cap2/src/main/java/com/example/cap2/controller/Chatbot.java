@@ -12,18 +12,14 @@ import java.util.Base64;
 @RestController
 public class Chatbot {
 
-    @PostMapping("/submit")
-    public String sendDataToPython(@RequestBody UserRequest payload) {
+    @PostMapping("/chatting")
+    public String sendDataToPython(@RequestBody UserChatting chatting) {
         try {
-            String code = payload.getCode();
-            byte[] decodedBytes = Base64.getDecoder().decode(code);
-            String decodedString = new String(decodedBytes);
+            String text = chatting.getText();
+            String name = chatting.getName();
 
-            String name = payload.getName();
-
-            // 코드 내용 확인 및 처리
-            System.out.println("Received code: " + decodedString);
             System.out.println("Received name: " + name);
+            System.out.println("Received text: " + text);
 
             // RestTemplate 객체 생성
             RestTemplate restTemplate = new RestTemplate();
@@ -31,19 +27,9 @@ public class Chatbot {
             // 파이썬 서버의 URL
             String pythonServerUrl = "http://127.0.0.1:5010/query/NORMAL";
 
-            // 파일 내용 읽기
-            Path filePath = Paths.get("../UserAnswer/" + name + "_output.txt");
-            byte[] fileContentBytes = Files.readAllBytes(filePath);
-            String fileContentString = new String(fileContentBytes);
-
             // 파일 내용과 코드를 Map에 저장
             Map<String, String> map = new HashMap<>();
-            map.put("output", fileContentString);
-            map.put("code", decodedString);
-            map.put("name", name);
-
-            System.out.println("R2: " + fileContentString);
-            System.out.println("R2: " + decodedString);
+            map.put("query", text);
 
             // HttpEntity 객체 생성 (요청 본문과 헤더 포함)
             HttpHeaders headers = new HttpHeaders();
@@ -56,10 +42,10 @@ public class Chatbot {
 
             if (responseFromPythonServer.getStatusCodeValue() == 200) {
                 Map<String, Object> responseBody = responseFromPythonServer.getBody();
-                System.out.println("R3: " + responseBody.get("result").toString());
-                return responseBody.get("result").toString();
+                System.out.println("R3: " + responseBody.get("Answer").toString());
+                return responseBody.get("Answer").toString();
             } else {
-                return "파이썬 서버로 데이터 전송 중 오류 발생";
+                return "챗봇 서버 에러 발생!";
             }
 
 

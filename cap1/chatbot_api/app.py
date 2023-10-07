@@ -12,7 +12,7 @@ backport = 6060
 # Flask 애플리케이션
 app = Flask(__name__)
 
-def backend_server(bottype, query, score):
+def backend_server(bottype, query):
     mySocket = socket.socket()
     mySocket.connect((host, backport))
 
@@ -20,7 +20,6 @@ def backend_server(bottype, query, score):
     json_data = {
         'Query': query,
         'BotType': bottype,
-        'score' : score
     }
     message = json.dumps(json_data)
     mySocket.send(message.encode())
@@ -35,7 +34,7 @@ def backend_server(bottype, query, score):
     return ret_data
 
 # 챗봇 엔진 서버와 통신
-def get_answer_from_engine(bottype, query, score):
+def get_answer_from_engine(bottype, query):
     # 챗봇 엔진 서버 연결
     mySocket = socket.socket()
     mySocket.connect((host, port))
@@ -44,7 +43,6 @@ def get_answer_from_engine(bottype, query, score):
     json_data = {
         'Query': query,
         'BotType': bottype,
-        'score': score
     }
     message = json.dumps(json_data)
     mySocket.send(message.encode())
@@ -82,10 +80,12 @@ def index():
 @app.route('/query/<bot_type>', methods=['POST'])
 def query(bot_type):
     body = request.get_json()
+
     try:
         if bot_type == 'NORMAL':
             # 일반 질의응답 API
-            ret = get_answer_from_engine(bottype=bot_type, query=body['query'], score=body['score'])
+            print(body)
+            ret = get_answer_from_engine(bottype=bot_type, query=body['query'])
             return jsonify(ret)
 
         else:

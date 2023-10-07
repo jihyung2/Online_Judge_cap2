@@ -72,9 +72,7 @@ def to_client(conn, addr):
         recv_json_data = json.loads(read.decode())
         print("데이터 수신 : ", recv_json_data)
         query = recv_json_data['Query']
-        usersetting = float(recv_json_data['score'])
         print(query)
-        print(usersetting)
 
         # 의도 파악
         intent_pred = intent.predict_class(query)
@@ -85,7 +83,7 @@ def to_client(conn, addr):
         selected_qes, score, answer, imageUrl, query_intent = f.search(query, intent_name)
         print(selected_qes,score,answer,imageUrl,query_intent)
 
-        if score < usersetting/100.0:
+        if score < 0.5:
             answer = "해당 질문에 대한 준비된 답변이 없습니다."
             imageUrl = "없음"
             # 사용자 질문, 예측 의도, 선택된 질문, 선택된 질문 의도, 유사도 점수

@@ -45,6 +45,7 @@
     </div>
 
     <div id="chatbox" class='mt-3 p-3 bg-white rounded'>
+        <div id="chatHistory"></div>
         <input type="text" id="message" placeholder="Type your message here" class='form-control'>
         <button onclick="sendMessage()" class='btn btn-success mt-2'>Send</button>
     </div>
@@ -226,7 +227,36 @@
     }
 
     function sendMessage() {
-        // TODO: Implement chat message sending logic here
+        var text = document.getElementById('message').value;
+
+        var userchat = {
+            text: text, // Base64 인코딩
+            name: "testing" // 전역 변수 사용
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/chatting', // REST API 엔드포인트 URL
+            contentType: 'application/json',
+            data: JSON.stringify(userchat),
+            success: function (data) {
+                // 사용자 메시지 출력
+                $('#chatHistory').append('<p>You: ' + text + '</p>');
+                // 서버 응답 출력
+                $('#chatHistory').append('<p>Bot: ' + data + '</p>');
+
+                // 입력창 초기화
+                document.getElementById('message').value = '';
+
+                // 스크롤 맨 아래로 이동
+                $('#chatHistory').scrollTop($('#chatHistory')[0].scrollHeight);
+            },
+            error: function (error) {
+                // 서버에 문제를 추가하는 중 오류가 발생한 경우의 처리 로직
+                alert('Error adding problem: ' + error.responseText);
+            }
+        });
+
     }
 
 </script>
