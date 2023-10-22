@@ -1,6 +1,7 @@
 package com.example.cap2.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.cap2.entity.Problem;
+import com.example.cap2.service.ProblemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
@@ -18,10 +20,16 @@ import org.apache.commons.io.FileUtils;
 @RequestMapping("/api/problems")
 public class Request {
 
+    private final ProblemService problemService;
+
+    public Request(ProblemService problemService) {
+        this.problemService = problemService;
+    }
+
     @PostMapping("/add")
-    public ResponseEntity<String> addProblem(@RequestBody ProblemRequest request) {
+    public ResponseEntity<String> addProblem(@RequestBody Problem request) {
         try {
-            Problem problem = new Problem(request.getName(), request.getDescription(), request.getCode());
+            problemService.saveProblem(request);
 
             String pythonFilePath = "../UserAnswer/"+request.getName()+".py";
 
@@ -42,7 +50,7 @@ public class Request {
             RestTemplate restTemplate = new RestTemplate();
 
             // 파이썬 서버의 URL
-            String pythonServerUrl = "http://127.0.0.1:8055/addProblemRunCode";
+            String pythonServerUrl = "http://127.0.0.1:8065/addProblemRunCode";
 
             // 파이썬 코드를 Map에 저장
             Map<String, String> map = new HashMap<>();
@@ -94,5 +102,9 @@ public class Request {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error reading output file: " + e.getMessage());
         }
+    }
+    @GetMapping("/all")
+    public List<Problem> getAllProblems() {
+        return problemService.getAllProblems();
     }
 }

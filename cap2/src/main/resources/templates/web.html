@@ -88,7 +88,27 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script type="text/javascript">
-
+    $(document).ready(function() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/problems/all',  // 모든 문제들을 가져오는 API 엔드포인트 URL
+            success:function(data){
+                for(var i=0; i<data.length; i++) {
+                    $('#problems').append('<li>' + data[i].name +
+                        '<button onclick=\'testProblem("' +
+                        data[i].name +
+                        '", "' +
+                        data[i].description +
+                        '", "' +
+                        escapeSpecialChars(data[i].code) +
+                        '")\' class=\'btn btn-primary btn-sm ml-2\'>Test</button></li>');
+                }
+            },
+            error:function(error){
+                console.log('Error:', error);
+            }
+        });
+    });
     function showChat() { $('#chatbox').show(); $('#problemList').hide(); $('#codebox').hide(); $('#addList').hide(); }
 
     function showProblems() { $('#chatbox').hide(); $('#problemList').show(); $('#addList').hide(); }
