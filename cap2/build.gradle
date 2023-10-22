@@ -43,7 +43,6 @@ dependencies {
     implementation 'org.webjars.npm:chart.js:3.5.1'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.1' // 현재 MariaDB JDBC 드라이버 버전에 맞게 업데이트하세요
-    implementation 'javax.persistence:javax.persistence-api:2.2'
 }
 
 dependencyManagement {

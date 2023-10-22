@@ -1,7 +1,7 @@
 package com.example.cap2.entity;
 
-import javax.persistence.*;
-import javax.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 @Entity
 @Table(name = "Probleminfo")
@@ -16,6 +16,10 @@ public class Problem {
     private String description;
     @Column(name = "code")
     private String code;
+    public Problem() {
+        // 기본 생성자 구현
+
+    }
 
     public Long getId(){return id;}
     public void setId(Long id) {
