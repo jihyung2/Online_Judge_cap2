@@ -78,7 +78,7 @@
         </div>
     <div class="form-group">
         <label for="output">Output:</label>
-        <textarea id="output" class="form-control" rows="5" cols="50"></textarea>
+        <textarea id="output" class="form-control" rows="5" cols="50" readonly></textarea>
     </div>
     <div class="form-group">
         <label for="code">Code:</label>
@@ -239,6 +239,9 @@
             });
         }
     }
+    function utf8_to_b64(str) {
+        return window.btoa(unescape(encodeURIComponent(str)));
+    }
 
     function send() {
         $('#Queryresult').empty();
@@ -250,7 +253,7 @@
             //크롬 관리자 모드 들어가서 console 누르면 돼
 
             var submitData = {
-                code: btoa(usercode), // Base64 인코딩
+                code: utf8_to_b64(usercode), // Base64 인코딩
                 name: currentProblemName // 전역 변수 사용
             };
 
