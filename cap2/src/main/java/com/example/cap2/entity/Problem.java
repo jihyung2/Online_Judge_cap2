@@ -12,7 +12,8 @@ public class Problem {
     private Long id;
     @Column(name = "name")
     private String name;
-    @Column(name = "description")
+    //Transinet 하면 그부분은 데이터베이스에 저장되지 않음 기억하기
+    @Transient
     private String description;
     @Column(name = "code")
     private String code;

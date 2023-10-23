@@ -36,15 +36,24 @@ public class Request {
             String pythonCode = request.getCode();
 
             File pythonFile = new File(pythonFilePath);
-
             pythonFile.getParentFile().mkdirs();
 
             FileWriter fileWriter = new FileWriter(pythonFile);
             fileWriter.write(pythonCode);
             fileWriter.close();
 
-            System.out.println("파이썬 파일이 UserAnswer폴더에 생성되었습니다.");
+            String pythonInfoPath = "../UserAnswer/"+request.getName()+"_info.txt";
 
+            String pythonInfo = request.getDescription();
+
+            File pythonFile2 = new File(pythonInfoPath);
+            pythonFile2.getParentFile().mkdirs();
+
+            FileWriter fileWriter2 = new FileWriter(pythonFile2);
+            fileWriter2.write(pythonInfo);
+            fileWriter2.close();
+
+            System.out.println("파이썬 파일이 UserAnswer폴더에 생성되었습니다.");
 
             // RestTemplate 객체 생성
             RestTemplate restTemplate = new RestTemplate();
@@ -111,7 +120,26 @@ public class Request {
     @DeleteMapping("/delete") // 웹에서 a.jax로 보낸 문제의 이름 data: { name: delName }의 name을 가져와서 service로 전송
     public ResponseEntity<String> deleteProblem(@RequestParam("name") String problemName) {
         // 문제 삭제 로직
+        // ResponseEntity는 반응을 가져오는거고, List는 안의 값을 가져오는거라고 생각하면 편할듯
         problemService.getDeleteProblems(problemName);
         return ResponseEntity.ok("Problem deleted successfully.");
     }
+    @GetMapping("/getDescription")
+    public ResponseEntity<String> getDescriptions(@RequestParam("name") String name) {
+        try {
+            File outputFile = new File("../UserAnswer/"+name+"_info.txt");
+            if (outputFile.exists()) {
+                String output = FileUtils.readFileToString(outputFile, StandardCharsets.UTF_8);
+                System.out.println(output);
+                return ResponseEntity.ok(output);
+            } else {
+                System.out.println("NO");
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.out.println("NO3");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error reading output file: " + e.getMessage());
+        }
+    }
+
 }

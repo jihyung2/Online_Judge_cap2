@@ -33,6 +33,11 @@
         .incorrect {
             color: red; /* 또는 다른 원하는 스타일을 적용하세요 */
         }
+        .description-box {
+            border: 1px solid black;
+            padding: 10px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -49,10 +54,10 @@
         <input type="text" id="message" placeholder="Type your message here" class='form-control'>
         <button onclick="sendMessage()" class='btn btn-success mt-2'>Send</button>
     </div>
-    <div id="addList" class='mt-3 p-3 bg-white rounded'>
+    <div id="addList" class='mt-3 p-3 bg-white rounded' style="height: 800px; overflow-y: scroll; display: none;">
         <input type="text" id="newProblemName" placeholder="Type your code name" class='form-control'>
         <textarea id="newProblemCode" placeholder="Type your code" class='form-control' rows="10"></textarea>
-        <input type="text" id="newProblemDescription" placeholder="Type your code info" class='form-control'>
+        <textarea id="newProblemDescription" placeholder="Type your code info" class='form-control' rows="10"></textarea>
         <button onclick="add()" class='btn btn-success mt-2'>Add</button>
     </div>
     <div id="problemList" class='mt-3 p-3 bg-white rounded'>
@@ -69,8 +74,8 @@
         <ul id='name' style='list-style-type:none;'>
         </ul>
     <p>Description:</p>
-        <ul id='description' style='list-style-type:none;'>
-        </ul>
+        <div id='description' class="description-box">
+        </div>
     <div class="form-group">
         <label for="output">Output:</label>
         <textarea id="output" class="form-control" rows="5" cols="50"></textarea>
@@ -135,7 +140,7 @@
                 success: function (data) {
                     // 성공적으로 서버에 문제를 추가한 경우의 처리 로직
                     $('#problems').append('<li>' + name + '<button onclick=\'testProblem("' + name + '", "' +
-                        description + '", "' + escapeSpecialChars(code) + '")\' class=\'btn btn-primary btn-sm ml-2\'>Test</button></li>');
+                        escapeSpecialChars(description) + '", "' + escapeSpecialChars(code) + '")\' class=\'btn btn-primary btn-sm ml-2\'>Test</button></li>');
                     showProblems();
                     alert(data); // 성공 메시지 표시
                 },
@@ -149,35 +154,51 @@
 
     var currentProblemName;
 
-    function testProblem(name, description) {
+    function testProblem(name) {
         // Clear existing problem details first
         $('#name').empty();
         $('#description').empty();
         $('#output').empty();
 
-        // Set the problem name and description
-        $('#name').append('<li>' + name + '</li>');
-        $('#description').append('<li>' + description + '</li>');
+        // Set the problem name
+        $('#name').text(name);
 
         // Assign the current problem name to the global variable
         currentProblemName = name;
 
+        // Make an AJAX request to get the problem description
         $.ajax({
             type: 'GET',
-            url: '/api/problems/getOutput',
+            url: '/api/problems/getDescription', // 새로운 엔드포인트 추가 필요
             data: { name: name },
-            success: function (response) {
-                $("#output").text(response);  // Display the output on the webpage
+            success: function (description) {
+                // Set the problem description
+                $('#description').text(description);
+
+                // Continue to retrieve the output
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/problems/getOutput',
+                    data: { name: name },
+                    success: function (response) {
+                        $("#output").text(response);  // Display the output on the webpage
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        alert('Error getting problem output');
+                    }
+                });
             },
             error: function (error) {
                 console.error(error);
-                alert('Error getting problem output');
+                alert('Error getting problem description');
             }
         });
 
         // Show the codebox
         $('#codebox').show();
     }
+
 
     function escapeSpecialChars(input) {
         // 특수 문자를 이스케이프 처리
