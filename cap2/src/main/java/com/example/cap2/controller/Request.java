@@ -107,7 +107,8 @@ public class Request {
     public List<Problem> getAllProblems() {
         return problemService.getAllProblems();
     }
-    @DeleteMapping("/delete")
+
+    @DeleteMapping("/delete") // 웹에서 a.jax로 보낸 문제의 이름 data: { name: delName }의 name을 가져와서 service로 전송
     public ResponseEntity<String> deleteProblem(@RequestParam("name") String problemName) {
         // 문제 삭제 로직
         problemService.getDeleteProblems(problemName);

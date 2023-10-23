@@ -198,7 +198,7 @@
             $.ajax({
                 type: 'DELETE', // HTTP DELETE 요청을 보냅니다.
                 url: '/api/problems/delete', // 삭제 API 엔드포인트 URL
-                data: { name: delName },
+                data: { name: delName }, //이 내용을 RequestParam으로 읽어들임
                 success: function (response) {
                     // 서버로부터 삭제 결과를 받았을 때의 처리 로직
                     alert('Problem deleted successfully.');
