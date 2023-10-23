@@ -192,20 +192,33 @@
         });
     }
 
-        function del() {
+    function del() {
         var delName = prompt("Delete problem name : ");
         if (delName) {
-            // Remove the problem, name, and description elements with the specified name
-            $("#problems li").filter(function () { return $.text([this]) === delName; }).remove();
-            $("#name li").filter(function () { return $.text([this]) === delName; }).remove();
-            $("#description li").filter(function () { return $.text([this]) === delName; }).remove();
-
-            // Hide the codebox if there are no more problems
-            if ($('#problems li').length === 0) {
-                $('#codebox').hide();
-            }
+            $.ajax({
+                type: 'DELETE', // HTTP DELETE 요청을 보냅니다.
+                url: '/api/problems/delete', // 삭제 API 엔드포인트 URL
+                data: { name: delName },
+                success: function (response) {
+                    // 서버로부터 삭제 결과를 받았을 때의 처리 로직
+                    alert('Problem deleted successfully.');
+                    // 삭제된 문제를 화면에서도 제거
+                    $("#problems li").filter(function () { return $.text([this]) === delName; }).remove();
+                    $("#name li").filter(function () { return $.text([this]) === delName; }).remove();
+                    $("#description li").filter(function () { return $.text([this]) === delName; }).remove();
+                    // 문제가 모두 삭제되었을 경우, 코드 상자를 숨깁니다.
+                    if ($('#problems li').length === 0) {
+                        $('#codebox').hide();
+                    }
+                },
+                error: function (error) {
+                    // 삭제 작업 중 오류가 발생한 경우의 처리 로직
+                    alert('Error deleting problem: ' + error.responseText);
+                }
+            });
         }
     }
+
     function send() {
         $('#Queryresult').empty();
         var code = document.getElementById('code').value;

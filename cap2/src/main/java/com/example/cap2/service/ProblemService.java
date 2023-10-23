@@ -25,4 +25,14 @@ public class ProblemService {
     public List<Problem> getAllProblems() {
         return problemRepository.findAll();
     }
+
+    public List<Problem> getDeleteProblems(String problemName) {
+        // 문제 이름에 해당하는 문제를 찾습니다.
+        List<Problem> deleteProblems = problemRepository.findByName(problemName);
+
+        // 찾은 문제를 삭제합니다.
+        problemRepository.deleteAll(deleteProblems);
+
+        return deleteProblems;
+    }
 }

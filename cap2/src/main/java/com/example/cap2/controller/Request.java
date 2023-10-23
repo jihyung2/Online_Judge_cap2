@@ -107,4 +107,10 @@ public class Request {
     public List<Problem> getAllProblems() {
         return problemService.getAllProblems();
     }
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteProblem(@RequestParam("name") String problemName) {
+        // 문제 삭제 로직
+        problemService.getDeleteProblems(problemName);
+        return ResponseEntity.ok("Problem deleted successfully.");
+    }
 }
