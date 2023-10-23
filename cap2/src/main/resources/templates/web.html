@@ -243,8 +243,7 @@
         return window.btoa(unescape(encodeURIComponent(str)));
     }
 
-
-    function send() {
+    function send() { // 변경점 : 기존 방식과 다른 utf8_to_b64 사용 이유: 코드가 길면 작동X
         $('#Queryresult').empty();
         var code = document.getElementById('code').value;
         var usercode = escapeSpecialChars(code)
