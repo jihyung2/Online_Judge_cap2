@@ -150,6 +150,7 @@
 
                     // 메시지 전송
                     sendMessage(message);
+                    appendMessageTag("right", "User", message);
                     // 입력창 clear
                     clearTextarea();
                 }
@@ -182,16 +183,20 @@
         // 메세지 전송
         function sendMessage(message) {
             // 서버에 전송하는 코드로 후에 대체
-            const data = {
-                "senderName"    : "User",
-                "message"        : message
+            const userchat = {
+                "name"    : "User",
+                "text"    : message
             };
             $.ajax({
                 type: 'POST',
                 url: '/chatting', // REST API 엔드포인트 URL
                 contentType: 'application/json',
-                data: JSON.stringify(data),
+                data: JSON.stringify(userchat),
                 success: function (data) {
+                    appendMessageTag("left", "ChatBot", data);
+
+                    $('div.chat').scrollTop($('div.chat').prop('scrollHeight'))
+
                 },
                 error: function (error) {
                     // 서버에 문제를 추가하는 중 오류가 발생한 경우의 처리 로직
@@ -199,18 +204,11 @@
                 }
             });
             // 통신하는 기능이 없으므로 여기서 receive
-            resive(data);
         }
 
         // 메세지 입력박스 내용 지우기
         function clearTextarea() {
             $('div.input-div textarea').val('');
-        }
-
-        // 메세지 수신
-        function resive(data) {
-            const LR = (data.senderName != myName)? "left" : "right";
-            appendMessageTag(LR, data.senderName, data.message);
         }
 
         return {
