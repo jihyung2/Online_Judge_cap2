@@ -29,7 +29,7 @@ public class restapi {
             RestTemplate restTemplate = new RestTemplate();
 
             // 파이썬 서버의 URL
-            String pythonServerUrl = "http://127.0.0.1:8065/submit";
+            String pythonServerUrl = "http://127.0.0.1:8035/submit";
 
             // 파일 내용 읽기
             Path filePath = Paths.get("../UserAnswer/" + name + "_output.txt");

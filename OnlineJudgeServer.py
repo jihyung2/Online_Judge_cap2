@@ -18,9 +18,9 @@ async def submit(request: Request):
     code = data.get('code')
     code  = eval('f' + f'"{code}"')
 
-    expected_output_str = request.json.get('output')
-    filename = request.json.get('name')
-    print(code,expected_output_str)
+    expected_output_str = data.get('output')  # 'output' 키에서 값을 가져옵니다.
+    filename = data.get('name')  # 'name' 키에서 값을 가져옵니다.
+    print(code, expected_output_str)
 
     current_directory = os.getcwd()
 
@@ -44,7 +44,7 @@ async def submit(request: Request):
             data = {"result": "Correct", "output": output}
             return JSONResponse(content=data)
         else:
-            data = {"result": "Correct", "output": output}
+            data = {"result": "Incorrect", "output": output}
             return JSONResponse(content=data)
 
     except subprocess.TimeoutExpired:
@@ -67,15 +67,16 @@ async def addProblemRunCode(request: Request):
         output = subprocess.check_output(['python3', file_path], timeout=5)
         output = output.decode('utf-8')
 
+        print(output)
         # 파일 삭제하기
         if os.path.exists(file_path):
             os.remove(file_path)
 
-        return output
+        return JSONResponse(content={"output": output})
 
     except subprocess.TimeoutExpired:
         return JSONResponse(content={"error": "Time limit exceeded"})
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8065)
+    uvicorn.run(app, host='0.0.0.0', port=8035)

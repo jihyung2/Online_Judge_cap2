@@ -59,7 +59,7 @@ public class Request {
             RestTemplate restTemplate = new RestTemplate();
 
             // 파이썬 서버의 URL
-            String pythonServerUrl = "http://127.0.0.1:8065/addProblemRunCode";
+            String pythonServerUrl = "http://127.0.0.1:8035/addProblemRunCode";
 
             // 파이썬 코드를 Map에 저장
             Map<String, String> map = new HashMap<>();
@@ -80,12 +80,15 @@ public class Request {
                     = restTemplate.postForEntity(pythonServerUrl, requestEntity, String.class);
 
             if (responseFromPythonServer.getStatusCodeValue() == 200) {
+                String jsonString = responseFromPythonServer.getBody();
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, String> map2 = mapper.readValue(jsonString, Map.class);
+                String output = map2.get("output");
+
                 BufferedWriter writer
                         = new BufferedWriter(new FileWriter("../UserAnswer/"+request.getName()+"_output.txt"));
-                writer.write(responseFromPythonServer.getBody());
+                writer.write(output);
                 writer.close();
-
-                System.out.println("파이썬 실행 결과가 output.txt 파일에 저장되었습니다.");
             } else {
                 System.out.println("Error occurred while sending code to Python server");
             }
