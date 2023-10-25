@@ -1,18 +1,21 @@
-from flask import Flask, request, jsonify
+from fastapi import FastAPI, Request
 import subprocess
 import base64
 import os
+from fastapi.responses import JSONResponse
+import uvicorn
 
 #모든 문제는 Python으로 해결되어야 합니다.
 # 모든 문제는 단일 출력 문자열을 생성해야 합니다.
 # 서버에서 직접 코드를 실행할 수 있습니다.
 
-app = Flask(__name__)
+app = FastAPI()
 
-@app.route('/submit', methods=['POST'])
-def submit():
+@app.post('/submit')
+async def submit(request: Request):
     # 사용자가 제출한 Base64 인코딩된 코드와 예상 출력값 받기
-    code = request.json.get('code')
+    data = await request.json()
+    code = data.get('code')
     code  = eval('f' + f'"{code}"')
 
     expected_output_str = request.json.get('output')
@@ -38,17 +41,21 @@ def submit():
         print(expected_output_str)
 
         if output == expected_output_str:
-            return jsonify({"result": "Correct", "output": output})
+            data = {"result": "Correct", "output": output}
+            return JSONResponse(content=data)
         else:
-            return jsonify({"result": "Incorrect", "output": output})
+            data = {"result": "Correct", "output": output}
+            return JSONResponse(content=data)
 
     except subprocess.TimeoutExpired:
-        return jsonify({"error": "Time limit exceeded"})
+        return JSONResponse(content={"error": "Time limit exceeded"})
 
-@app.route('/addProblemRunCode', methods=['POST'])
-def addProblemRunCode():
+
+@app.post('/addProblemRunCode')
+async def addProblemRunCode(request: Request):
     # 사용자가 등록한 코드 받기
-    code = request.json.get('code')
+    data = await request.json()
+    code = data.get('code')
 
     # 코드를 .py 파일로 저장하기
     file_path = 'UserAnswer/problem_code.py'
@@ -67,7 +74,8 @@ def addProblemRunCode():
         return output
 
     except subprocess.TimeoutExpired:
-        return jsonify({"error": "Time limit exceeded"})
+        return JSONResponse(content={"error": "Time limit exceeded"})
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8065)
+    uvicorn.run(app, host='0.0.0.0', port=8065)
