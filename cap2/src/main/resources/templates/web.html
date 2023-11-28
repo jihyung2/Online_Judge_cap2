@@ -278,7 +278,7 @@
             var problemData = {
                 name: name,
                 description: description,
-                code: code.value.replace(/\t/g, '   '), // Tab 키를 누를 경우 스페이스 세 번으로 변경
+                code: code, // Tab 키를 누를 경우 스페이스 세 번으로 변경
             };
 
             $.ajax({
