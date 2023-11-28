@@ -104,6 +104,19 @@
         <textarea id="newProblemDescription" placeholder="Type your code info" class='form-control' rows="10"></textarea>
         <button onclick="add()" class='btn btn-success mt-2'>Add</button>
     </div>
+    <script>
+        // Tab 키 입력 처리
+        document.getElementById('newProblemCode').addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault(); // 기본 동작 방지
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+                var value = $(this).val(); // Tab 대신 스페이스 4칸 입력
+                $(this).val(value.substring(0, start) + "    " + value.substring(end));
+                this.selectionStart = this.selectionEnd = start + 4;
+            }
+        });
+    </script>
     <div id="problemList" class='mt-3 p-3 bg-white rounded'>
         <h4>Problems:</h4>
         <ul id='problems' style='list-style-type:none;'>
@@ -144,7 +157,15 @@
         function init() {
             // enter 키 이벤트
             $(document).on('keydown', 'div.input-div textarea', function(e){
-                if(e.keyCode == 13 && !e.shiftKey) {
+                if(e.keyCode == 9) {
+                    e.preventDefault();
+                    var textarea = $(this)[0];
+                    var start = textarea.selectionStart;
+                    var end = textarea.selectionEnd;
+                    var value = textarea.value;
+                    textarea.value = value.substring(0, start) + "    " + value.substring(end);
+                    textarea.selectionStart = textarea.selectionEnd = start + 4;
+                } else if(e.keyCode == 13 && !e.shiftKey) {
                     e.preventDefault();
                     const message = $(this).val();
 
@@ -257,7 +278,7 @@
             var problemData = {
                 name: name,
                 description: description,
-                code: code, // 특수 문자가 적절히 이스케이프됩니다.
+                code: code.value.replace(/\t/g, '   '), // Tab 키를 누를 경우 스페이스 세 번으로 변경
             };
 
             $.ajax({
@@ -276,6 +297,7 @@
                     // 서버에 문제를 추가하는 중 오류가 발생한 경우의 처리 로직
                     alert('Error adding problem: ' + error.responseText);
                 }
+
             });
         }
     }
@@ -287,7 +309,7 @@
         $('#name').empty();
         $('#description').empty();
         $('#output').empty();
-
+        $('#Queryresult').empty();
         // Set the problem name
         $('#name').text(name);
 
@@ -323,7 +345,16 @@
                 alert('Error getting problem description');
             }
         });
-
+        $('#code').keydown(function (e) {
+            if (e.keyCode === 9) {
+                e.preventDefault();
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+                var value = $(this).val();
+                $(this).val(value.substring(0, start) + "    " + value.substring(end));
+                this.selectionStart = this.selectionEnd = start + 4;
+            }
+        });
         // Show the codebox
         $('#codebox').show();
     }
