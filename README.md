@@ -66,7 +66,8 @@
 - ### Web OnlineJudge
 <img width="1109" alt="KakaoTalk_Photo_2023-10-25-16-42-13" src="https://github.com/HBNU-SWUNIV/come-capstone23-edubot/assets/124351914/0d2b8b07-4c57-404e-9f89-caa50bd59ddf">
 
-
+- ### 교내 포트폴리오 경진대회 팀 부문, 우수상 수상
+![포폴 팀 우수상](https://github.com/jihyung2/sat_simulation/assets/108830942/312e029d-3226-476e-8bdd-392106120023)
 
 ## 개발과정
 
